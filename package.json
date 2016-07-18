@@ -1,0 +1,30 @@
+{
+  "name": "midbound-tracker",
+  "version": "1.0.0",
+  "description": "Midbound Activity Tracker",
+  "main": "midbound.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alhankeser/tracker.git"
+  },
+  "keywords": [
+    "tracker",
+    "midbound",
+    "marketing",
+    "analytics"
+  ],
+  "author": "Valentin Prugnaud, Alhan Keser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alhankeser/tracker/issues"
+  },
+  "homepage": "https://github.com/alhankeser/tracker#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-minify": "0.0.12",
+    "gulp-watch": "^4.3.8"
+  }
+}

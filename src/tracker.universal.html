@@ -1,0 +1,21 @@
+<script>
+/**
+ * Midbound Tracker Snippet (universal)
+ *
+ * @param m = Window Object
+ * @param i = Document Object
+ * @param d = Tag name
+ * @param w = URL to Midbound script
+ * @param a = Name of object
+ * @param y = Variable used to construct new tag
+ * @param s = Variable used to hold DOM element for new tag
+ */
+(function (m, i, d, w, a, y, s) {
+    m['Midbound'] = a;
+    m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) }, m[a].l = 1 * new Date();
+    y = i.createElement(d), s = i.getElementsByTagName(d)[0];
+    y.async = 1;
+    y.src = w;
+    s.parentNode.insertBefore(y, s);
+})(window, document, 'script', '../build/midbound.js', 'mb');
+</script>
