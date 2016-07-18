@@ -15,26 +15,15 @@
         </ul>
     </nav>
 
-    <!-- Regular snippet -->
-    <!--<script>-->
-        <!--(function (m, i, d, w, a, y, s) {-->
-            <!--m['MidboundObject'] = a;-->
-            <!--m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) }, m[a].l = 1 * new Date();-->
-            <!--y = i.createElement(d), s = i.getElementsByTagName(d)[0];-->
-            <!--y.async = 1;-->
-            <!--y.src = w;-->
-            <!--s.parentNode.insertBefore(y, s);-->
-        <!--})(window, document, 'script', '../build/midbound.js', 'mb');-->
-    <!--</script>-->
-
     <!-- Modern browser only snippet -->
     <script>
         window.mb = window.mb || function(){
-            (mb.q = mb.q || []).push(arguments)
-        };
+                    (mb.q = mb.q || []).push(arguments)
+                };
         mb.l =+ new Date;
         mb('create', 'UA-XXXXX-Y', 'auto');
         mb('send', 'pageview');
+        console.trace(mb);
     </script>
     <script async src='../build/midbound.js'></script>
 </body>

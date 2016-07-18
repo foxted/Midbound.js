@@ -14,5 +14,17 @@
             <li><a href="contact.html">Contact</a></li>
         </ul>
     </nav>
+
+    <!-- Modern browser only snippet -->
+    <script>
+        window.mb = window.mb || function(){
+                    (mb.q = mb.q || []).push(arguments)
+                };
+        mb.l =+ new Date;
+        mb('create', 'UA-XXXXX-Y', 'auto');
+        mb('send', 'pageview');
+        console.trace(mb);
+    </script>
+    <script async src='../build/midbound.js'></script>
 </body>
 </html>

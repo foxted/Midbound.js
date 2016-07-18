@@ -1,5 +1,5 @@
 (function () {
 
-    console.log(window);
+    console.info('Midbound loaded!');
 
 })();
