@@ -15,6 +15,9 @@
         </ul>
     </nav>
 
+    <button onclick="mb('send', 'event', 'blablbal')">Event that does exist!</button>
+    <button onclick="mb('click', 'button')">Event that does not exist!</button>
+
     <!-- Universal snippet -->
     <script>
         (function (m, i, d, w, a, y, s) {
@@ -26,7 +29,12 @@
             s.parentNode.insertBefore(y, s);
         })(window, document, 'script', '../../build/midbound.js', 'mb');
 
-        console.log(mb);
+        mb('create', 'UA-XXXXX-Y', 'auto');
+        mb('send', 'pageview');
+
+        setTimeout(function() {
+            mb('send', 'action');
+        }, 2000);
     </script>
 </body>
 </html>
