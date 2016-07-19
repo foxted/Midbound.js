@@ -6,7 +6,7 @@
      * Configuration
      */
     var localStorageKey = "midbound-guid";
-    var pixelUrl = "https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif";
+    var pixelUrl = "http://midbound.dev/_mb.gif";
 
     /**
      * Fetch object name, timestamp and queue
@@ -47,11 +47,17 @@
     /**
      * Create pixel
      */
-    var createPixel = function() {
+    var createPixel = function(trackerId, guid, event) {
         var img= new Image(1,1) || document.createElement('img');
-        img.src= pixelUrl;
 
-        return img;
+        img.src= pixelUrl +
+            '?midid=' + encodeURIComponent(trackerId) +
+            '&midguid=' + encodeURIComponent(guid) +
+            '&mide=' + encodeURIComponent(event) +
+            '&midurl=' + encodeURIComponent(window.location) +
+            '&midts=' + encodeURIComponent(Date.now());
+
+        console.log(img.src);
     }
 
     /**
@@ -59,9 +65,10 @@
      * @param arguments
      * @returns {Array}
      */
-    var extractArguments = function(arguments) {
+    var extractArguments = function(arguments, splice) {
 
         var args = [];
+        splice = splice || 1;
 
         if(Array.isArray(args)) {
             args = Array.prototype.slice.call(arguments);
@@ -69,7 +76,7 @@
             args = arguments;
         }
 
-        args = args.splice(-1);
+        args.splice(0, splice);
 
         return args;
     }
@@ -86,24 +93,23 @@
     var Midbound = {
         queue: queue,
         timestamp: timestamp,
-        create: function() {
+        create: function(midboundId) {
+            this.midboundId = midboundId;
+
             if(midboundGuid === null) {
                 localStorage.setItem(localStorageKey, guid());
             }
         },
-        send: function() {
-            console.log('Send information');
-
-            var args = extractArguments(arguments);
-
+        send: function(eventType) {
+            console.group(eventType);
             // Create pixel with parameters
-
-            document.body.appendChild(createPixel());
+            createPixel(this.midboundId, localStorage.getItem(localStorageKey), eventType, arguments);
+            console.groupEnd();
         },
         init: function() {
             var i;
             for (i = 0; i < this.queue.length; i++) {
-                this[queue[i][0]].apply(null, queue[i]);
+                this[queue[i][0]].apply(null, extractArguments(queue[i]));
             }
             this.queue = [];
         }
@@ -113,7 +119,7 @@
 
     this[objectName] = function(name) {
         if(typeof Midbound[name] === "function") {
-            Midbound[name].apply(null, arguments);
+            Midbound[name].apply(null, extractArguments(arguments));
         }
     }
 

@@ -29,12 +29,9 @@
             s.parentNode.insertBefore(y, s);
         })(window, document, 'script', '../../build/midbound.js', 'mb');
 
-        mb('create', 'UA-XXXXX-Y', 'auto');
+        mb('create', 'UA-XXXXX-Y');
         mb('send', 'pageview');
-
-        setTimeout(function() {
-            mb('send', 'action');
-        }, 2000);
+        mb('send', 'event');
     </script>
 </body>
 </html>
