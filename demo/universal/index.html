@@ -27,11 +27,10 @@
             y.async = 1;
             y.src = w;
             s.parentNode.insertBefore(y, s);
-        })(window, document, 'script', '../../build/midbound.js', 'mb');
+        })(window, document, 'script', '../midbound.js', 'mb');
 
-        mb('create', 'UA-XXXXX-Y');
-        mb('send', 'pageview');
-        mb('send', 'event');
+        mb('create', 'MB-XXXXXXXX-1');
+//        mb('send', 'pageview');
     </script>
 </body>
 </html>

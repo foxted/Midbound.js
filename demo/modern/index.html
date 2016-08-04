@@ -15,19 +15,15 @@
         </ul>
     </nav>
 
-    <button onclick="mb('send', 'event', 'blablbal')">Event that does exist!</button>
-    <button onclick="mb('click', 'button')">Event that does not exist!</button>
+    <button onclick="mb('send', 'click', 'My event')">Event that does exist!</button>
+    <button onclick="mb('send', 'click')">Event that does not exist!</button>
 
     <!-- Modern browser only snippet -->
     <script>
         window.mb = window.mb || function(){ (mb.q = mb.q || []).push(arguments) }, mb.l =+ new Date;
-        mb('create', 'UA-XXXXX-Y', 'auto');
-        mb('send', 'pageview');
-
-        setTimeout(function() {
-            mb('send', 'action');
-        }, 2000);
+        mb('create', 'MB-XXXXXXXX-1');
+//        mb('send', 'visit');
     </script>
-    <script async src='../../build/midbound.js'></script>
+    <script async src='../midbound.js'></script>
 </body>
 </html>

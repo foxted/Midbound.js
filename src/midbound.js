@@ -5,7 +5,7 @@
     /**
      * Configuration
      */
-    var localStorageKey = "midbound-guid";
+    var localStorageGuidKey = "midbound-guid";
     var pixelUrl = "http://midbound.dev/_mb.gif";
 
     /**
@@ -47,17 +47,15 @@
     /**
      * Create pixel
      */
-    var createPixel = function(trackerId, guid, event) {
+    var createPixel = function(trackerId, storage, event) {
         var img= new Image(1,1) || document.createElement('img');
 
         img.src= pixelUrl +
             '?midid=' + encodeURIComponent(trackerId) +
-            '&midguid=' + encodeURIComponent(guid) +
+            '&midguid=' + encodeURIComponent(storage.guid) +
             '&mide=' + encodeURIComponent(event) +
             '&midurl=' + encodeURIComponent(window.location) +
             '&midts=' + encodeURIComponent(Date.now());
-
-        console.log(img.src);
     }
 
     /**
@@ -84,7 +82,7 @@
     /**
      * Look for previous Midbound ID
      */
-    var midboundGuid = localStorage.getItem(localStorageKey);
+    var midboundGuid = localStorage.getItem(localStorageGuidKey);
 
     /**
      * Midbound object
@@ -97,13 +95,14 @@
             this.midboundId = midboundId;
 
             if(midboundGuid === null) {
-                localStorage.setItem(localStorageKey, guid());
+                localStorage.setItem(localStorageGuidKey, guid());
             }
         },
         send: function(eventType) {
             console.group(eventType);
             // Create pixel with parameters
-            createPixel(this.midboundId, localStorage.getItem(localStorageKey), eventType, arguments);
+            createPixel(this.midboundId, localStorage.getItem(localStorageGuidKey), eventType, arguments);
+            console.log(localStorage.getItem(localStorageGuidKey));
             console.groupEnd();
         },
         init: function() {
