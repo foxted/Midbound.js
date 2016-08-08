@@ -4,7 +4,7 @@
      * Configuration
      */
     var localStorageGuidKey = "midbound-guid";
-    var pixelUrl = "http://midbound.dev/_mb.gif";
+    var pixelUrl = "https://app.midbound.io/_mb.gif";
 
     /**
      * Look for previous Midbound ID
