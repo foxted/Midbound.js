@@ -11,7 +11,7 @@ This snippet will work on every browser that Midbound supports. (cf. Browser Sup
 <script>
     (function (m, i, d, w, a, y, s) {
         m['MidboundObject'] = a;
-        m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) }, m[a].l = 1 * new Date();
+        m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) };
         y = i.createElement(d), s = i.getElementsByTagName(d)[0];
         y.async = 1;
         y.src = w;
@@ -30,7 +30,7 @@ to a synchronous loading on older browsers that do not support the `async` attri
 
 ```
 <script>
-    window.mb = window.mb || function(){ (mb.q = mb.q || []).push(arguments) }, mb.l =+ new Date;
+    window.mb = window.mb || function(){ (mb.q = mb.q || []).push(arguments) };
     mb('create', 'UA-XXXXX-Y', 'auto');
     mb('send', 'pageview');
 </script>
