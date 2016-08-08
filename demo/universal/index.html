@@ -15,22 +15,21 @@
         </ul>
     </nav>
 
-    <button onclick="mb('send', 'event', 'blablbal')">Event that does exist!</button>
-    <button onclick="mb('click', 'button')">Event that does not exist!</button>
+    <button onclick="mb('send', 'click', 'blablbal')">Event that does exist!</button>
+    <button onclick="mb('send', 'bob')">Event that does not exist!</button>
 
-    <!-- Universal snippet -->
     <script>
         (function (m, i, d, w, a, y, s) {
             m['MidboundObject'] = a;
-            m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) }, m[a].l = 1 * new Date();
+            m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) };
             y = i.createElement(d), s = i.getElementsByTagName(d)[0];
             y.async = 1;
             y.src = w;
             s.parentNode.insertBefore(y, s);
         })(window, document, 'script', '../midbound.js', 'mb');
 
-        mb('create', 'MB-XXXXXXXX-1');
-//        mb('send', 'pageview');
+        mb('create', 'MB-XXXXXXXX-X');
+        mb('send', 'download', 'this.pdf');
     </script>
 </body>
 </html>
