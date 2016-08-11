@@ -18,6 +18,23 @@
     <button onclick="mb('send', 'click', 'blablbal')">Event that does exist!</button>
     <button onclick="mb('send', 'bob')">Event that does not exist!</button>
 
+    <form action="#" method="POST">
+        <input type="text" name="name" placeholder="Enter your name">
+        <input type="email" name="email" placeholder="Enter your email">
+        <input type="text" name="phone" placeholder="Enter your phone">
+        <input type="text" name="shouldnotbetracked-2" placeholder="This field should not be tracked">
+        <input type="text" name="shouldbetracked" placeholder="Enter your company" class="form-control company">
+    </form>
+
+    <form action="#" method="POST">
+        <input type="number" name="firstname" placeholder="Enter your firstname" class="form-control">
+        <input type="text" name="lastname" placeholder="Enter your lastname" class="form-control">
+        <input type="text" name="company" placeholder="Enter your company" class="form-control">
+        <input type="email" name="email" placeholder="Enter your email">
+        <input type="text" name="phone" placeholder="Enter your phone">
+        <input type="text" name="shouldnotbetracked-2" placeholder="This field should not be tracked">
+    </form>
+
     <script>
         (function (m, i, d, w, a, y, s) {
             m['MidboundObject'] = a;
@@ -28,8 +45,8 @@
             s.parentNode.insertBefore(y, s);
         })(window, document, 'script', '../midbound.js', 'mb');
 
-        mb('create', 'MB-XXXXXXXX-X');
-        mb('send', 'download', 'this.pdf');
+        mb('create', 'MB-12345678-1');
+        mb('send', 'pageview');
     </script>
 </body>
 </html>
