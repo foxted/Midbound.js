@@ -4,7 +4,7 @@
      * Configuration
      */
     var localStorageGuidKey = "midbound-guid";
-    var pixelUrl = "http://midbound.dev/_mb.gif";
+    var pixelUrl = "https://midbound.com/_mb.gif";
 
     /**
      * Look for previous Midbound ID
@@ -70,10 +70,15 @@
             '&midguid=' + encodeURIComponent(guid) +
             '&midac=' + encodeURIComponent(action) +
             '&midts=' + encodeURIComponent(Date.now()) +
-            '&midrc=' + encodeURIComponent(resource || window.location);
+            '&midurl=' + encodeURIComponent(window.location);
+
+        // If resource exists, set the resource
+        if(resource !== null && typeof resource !== "undefined") {
+            src += '&midrc=' + encodeURIComponent(resource);
+        }
 
         // If capturing, set the type
-        if(type !== null) {
+        if(type !== null && typeof type !== "undefined") {
             src += '&midtype=' + encodeURIComponent(type);
         }
 

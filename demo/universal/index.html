@@ -43,9 +43,10 @@
             y.async = 1;
             y.src = w;
             s.parentNode.insertBefore(y, s);
-        })(window, document, 'script', '../midbound.js', 'mb');
+        })(window, document, 'script', 'https://cdn.midbound.com/midbound.js', 'mb');
 
-        mb('create', 'MB-12345678-1');
+
+        mb('create', 'MB-123456789-1');
         mb('send', 'pageview');
     </script>
 </body>
