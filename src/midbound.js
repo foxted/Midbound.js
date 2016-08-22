@@ -3,33 +3,42 @@
     /**
      * Configuration
      */
-    var localStorageGuidKey = "midbound-guid";
-    var pixelUrl = "https://midbound.com/_mb.gif";
+    var config = {
+        // Key used for local storage
+        localStorageGuidKey: "midbound-guid",
+
+        // Pixel URL for sending events
+        pixelUrl: "https://midbound.com/_mb.gif",
+
+        // Name of the midbound attribute
+        midboundAttributeName: 'data-midbound-type',
+
+        // Target field types
+        targetTypes: ['text', 'email'],
+
+        // Keywords used for matching types
+        keywords: {
+            names: [
+                'firstname', 'fname', 'first name', 'first-name',
+                'lastname', 'last name', 'lname', 'last-name',
+                'fullname', 'full name', 'name'
+            ],
+            emails: ['email', 'e-mail', 'e_mail', 'e mail'],
+            companies: ['company'],
+            phones: ['phone', 'phone-number', 'phone number']
+        }
+    };
 
     /**
      * Look for previous Midbound ID
      */
-    var midboundGuid = localStorage.getItem(localStorageGuidKey);
+    var midboundGuid = localStorage.getItem(config.localStorageGuidKey);
 
     /**
      * Fetch object name, timestamp and queue
      */
     var objectName = window['MidboundObject'] = window['MidboundObject'] || 'mb';
     var queue = window[objectName].q;
-
-    /**
-     * Form binding options
-     */
-    var midboundAttributeName = 'data-midbound-type';
-    var targetTypes = ['email', 'text'];
-    var nameLabels = [
-        'firstname', 'fname', 'first name', 'first-name',
-        'lastname', 'last name', 'lname', 'last-name',
-        'fullname', 'full name', 'name'
-    ];
-    var emailLabels = ['email', 'e-mail', 'e_mail', 'e mail'];
-    var companyLabels = ['company'];
-    var phoneLabels = ['phone'];
 
     /**
      * Check user DoNotTrack Setting
@@ -43,7 +52,6 @@
     /**
      * GUID Generator
      * Creates GUID for user based on several different browser variables
-     * It will never be RFC4122 compliant but it is robust
      * @returns {Number}
      */
     var guid = function () {
@@ -61,11 +69,16 @@
     };
 
     /**
-     * Create pixel
+     * Create tracking pixel on the page
+     * @param trackerId
+     * @param guid
+     * @param action
+     * @param resource
+     * @param type
      */
-    var createPixel = function (trackerId, guid, action, resource, type) {
+    var createTrackingPixel = function (trackerId, guid, action, resource, type) {
         var img = new Image(1, 1) || document.createElement('img');
-        var src = pixelUrl +
+        var src = config.pixelUrl +
             '?midid=' + encodeURIComponent(trackerId) +
             '&midguid=' + encodeURIComponent(guid) +
             '&midac=' + encodeURIComponent(action) +
@@ -86,13 +99,14 @@
     }
 
     /**
-     * Extract arguments
+     * Extract method arguments
      * @param arguments
+     * @param splice
      * @returns {Array}
      */
-    var extractArguments = function (arguments, splice) {
-
+    var extractMethodArguments = function (arguments, splice) {
         var args = [];
+
         splice = splice || 1;
 
         if (Array.isArray(args)) {
@@ -108,11 +122,10 @@
 
     /**
      * Save the information on Midbound onblur
-     * @param inputValue
-     * @TODO Add some validation for emails
+     * @param event
      */
-    var saveInformationOnBlur = function (event) {
-        var type = event.target.getAttribute(midboundAttributeName);
+    var saveInformationOnBlurCallback = function (event) {
+        var type = event.target.getAttribute(config.midboundAttributeName);
         var value = event.target.value || '';
 
         if(value.trim().length > 0) {
@@ -126,7 +139,125 @@
      * @param type
      */
     var bindMidboundAttributes = function(field, type) {
-        field.setAttribute(midboundAttributeName, type);
+        field.setAttribute(config.midboundAttributeName, type);
+    }
+
+
+    /**
+     * Find the all the parents until selector is met
+     * @param el
+     * @returns {Array}
+     */
+    var findSurroundingElements = function (el) {
+        var prev = [];
+
+        while (el.parentNode) {
+            el = el.parentNode;
+            prev.push(extractElementInformation(el));
+
+            if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'form') {
+                return prev;
+            }
+        }
+
+        return prev;
+    };
+
+    /**
+     * Extract information about an element
+     * @param el
+     * @returns {{type: string, name: string, id: string, placeholder: string, classes: (string|string)}}
+     */
+    var extractElementInformation = function(el) {
+        return {
+            type: el.getAttribute('type'),
+            name: el.getAttribute('name'),
+            id: el.getAttribute('id'),
+            placeholder: el.getAttribute('placeholder'),
+            classes: el.getAttribute('class') || ''
+        }
+    }
+
+    /**
+     * Combine all element information to an array
+     * @param attributes
+     * @returns {Array}
+     */
+    var combineInputInformation = function(attributes) {
+        var inputInformation = [];
+
+        inputInformation.push(attributes.type);
+        inputInformation.push(attributes.name);
+        inputInformation.push(attributes.id);
+        inputInformation.push(attributes.placeholder);
+        inputInformation = inputInformation.concat(attributes.classes.split(' '));
+
+        inputInformation = inputInformation.filter(function(item) {
+            return item && item.length;
+        });
+
+        inputInformation = inputInformation.map(function(item) {
+            return item.toLowerCase();
+        });
+
+        return inputInformation;
+    }
+
+    /**
+     * Combine the information of all surrounding elements
+     * @param surroundingElements
+     * @returns {*}
+     */
+    var combineSurroundingElementsInformation = function(surroundingElements) {
+        surroundingElements = surroundingElements.map(function(item) {
+            return combineInputInformation(item);
+        });
+
+        surroundingElements = surroundingElements.reduce(function(a, b) {
+            return a.concat(b);
+        });
+
+        return surroundingElements;
+    }
+
+    /**
+     * Bind element if recognized
+     * @param field
+     * @param inputInformation
+     * @returns {boolean}
+     */
+    var hasValidInformation = function(field, inputInformation) {
+        var type = null;
+        var foundValidInformation = false;
+
+        for (var i = 0; i < inputInformation.length; i++) {
+            if (new RegExp(config.keywords.names.join("|")).test(inputInformation[i])) {
+                type = 'name';
+                foundValidInformation = true;
+                break;
+            }
+            if (new RegExp(config.keywords.emails.join("|")).test(inputInformation[i])) {
+                type = 'email';
+                foundValidInformation = true;
+                break;
+            }
+            if (new RegExp(config.keywords.companies.join("|")).test(inputInformation[i])) {
+                type = 'company';
+                foundValidInformation = true;
+                break;
+            }
+            if (new RegExp(config.keywords.phones.join("|")).test(inputInformation[i])) {
+                type = 'phone';
+                foundValidInformation = true;
+                break;
+            }
+        }
+
+        if(type !== null) {
+            bindMidboundAttributes(field, type);
+        }
+
+        return foundValidInformation;
     }
 
     /**
@@ -134,51 +265,27 @@
      * @param field
      * @returns {boolean}
      */
-    var validateAndBindField = function (field) {
-        var fieldType = field.getAttribute('type');
-        var fieldName = field.getAttribute('name');
-        var fieldClasses = field.getAttribute('class') || '';
+    var validateAndBindField = function (field, inputs) {
+        // Gather information about the input
+        var attributes = extractElementInformation(field);
 
-        if (targetTypes.indexOf(fieldType) < 0) {
+        // Check if field type is suported
+        if (config.targetTypes.indexOf(attributes.type) < 0) {
             return false;
         }
 
-        var type = null;
-        var inputInformation = [];
-        var foundValidInformation = false;
+        // Start analyzing...
+        var inputInformation = combineInputInformation(attributes);
+        var surroundingElements = findSurroundingElements(field);
 
-        inputInformation.push(fieldType);
-        inputInformation.push(fieldName);
-        inputInformation = inputInformation.concat(fieldClasses.split(' '));
+        // Merge surrounding elements info
+        surroundingElements = combineSurroundingElementsInformation(surroundingElements);
 
-        inputInformation = inputInformation.filter(function(item) {
-            return item.length > 0;
-        });
+        // Merge input info and surrounding element info
+        inputInformation = inputInformation.concat(surroundingElements);
 
-        for (var i = 0; i < inputInformation.length; i++) {
-            if (nameLabels.indexOf(inputInformation[i]) > -1) {
-                type = 'name';
-                foundValidInformation = true;
-            }
-            if (emailLabels.indexOf(inputInformation[i]) > -1) {
-                type = 'email';
-                foundValidInformation = true;
-            }
-            if (companyLabels.indexOf(inputInformation[i]) > -1) {
-                type = 'company';
-                foundValidInformation = true;
-            }
-            if (phoneLabels.indexOf(inputInformation[i]) > -1) {
-                type = 'phone';
-                foundValidInformation = true;
-            }
-
-            if(type !== null) {
-                bindMidboundAttributes(field, type);
-            }
-        }
-
-        return foundValidInformation;
+        // Search for a match
+        return hasValidInformation(field, inputInformation);
     };
 
     /**
@@ -188,8 +295,8 @@
         // Bind listener on every input with specific criteria
         var inputs = document.getElementsByTagName('input');
         for (var i = 0; i < inputs.length; i++) {
-            if (validateAndBindField(inputs[i])) {
-                inputs[i].addEventListener("blur", saveInformationOnBlur);
+            if (validateAndBindField(inputs[i], inputs)) {
+                inputs[i].addEventListener("blur", saveInformationOnBlurCallback);
             }
         }
     }
@@ -227,11 +334,11 @@
             this.mode = mode || 'auto';
 
             if (midboundGuid === null) {
-                localStorage.setItem(localStorageGuidKey, guid());
+                localStorage.setItem(config.localStorageGuidKey, guid());
             }
 
             if (this.mode === 'auto') {
-                addMidboundGuidToForms(localStorage.getItem(localStorageGuidKey));
+                addMidboundGuidToForms(localStorage.getItem(config.localStorageGuidKey));
                 bindingEventsOnFields();
             }
         },
@@ -242,9 +349,9 @@
          * @param resource
          */
         send: function (actionType, resource, type) {
-            createPixel(
+            createTrackingPixel(
                 this.midboundId,
-                localStorage.getItem(localStorageGuidKey),
+                localStorage.getItem(config.localStorageGuidKey),
                 actionType,
                 resource,
                 type
@@ -257,7 +364,7 @@
         init: function () {
             var i;
             for (i = 0; i < this.queue.length; i++) {
-                this[queue[i][0]].apply(null, extractArguments(queue[i]));
+                this[queue[i][0]].apply(null, extractMethodArguments(queue[i]));
             }
             this.queue = [];
         }
@@ -269,7 +376,7 @@
     // Replace queue with active tracker
     this[objectName] = function (name) {
         if (typeof Midbound[name] === "function") {
-            Midbound[name].apply(null, extractArguments(arguments));
+            Midbound[name].apply(null, extractMethodArguments(arguments));
         }
     }
 
