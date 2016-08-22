@@ -7,12 +7,12 @@ var paths = {
 
 gulp.task('scripts', function() {
     gulp.src(paths.scripts)
-        // .pipe(minify({
-        //     ext:{
-        //         min:'.js'
-        //     },
-        //     noSource: true
-        // }))
+        .pipe(minify({
+            ext:{
+                min:'.js'
+            },
+            noSource: true
+        }))
         .pipe(gulp.dest('build/'));
 });
 
