@@ -9,16 +9,18 @@ This snippet will work on every browser that Midbound supports. (cf. Browser Sup
 
 ```
 <script>
-    (function (m, i, d, w, a, y, s) {
-        m['MidboundObject'] = a;
-        m[a] = m[a] || function () { (m[a].q = m[a].q || []).push(arguments) };
-        y = i.createElement(d), s = i.getElementsByTagName(d)[0];
-        y.async = 1;
-        y.src = w;
-        s.parentNode.insertBefore(y, s);
-    })(window, document, 'script', 'midbound.js', 'mb');
-
-    mb('create', 'UA-XXXXX-Y', 'auto');
+    (function (h, i, q, u, o, t, a) {
+        h['Midbound'] = o;
+        h[o] = h[o] || function () {
+            (h[o].q = h[o].q || []).push(arguments)
+        }, h[o].l = 1 * new Date();
+        t = i.createElement(q), a = i.getElementsByTagName(q)[0];
+        t.async = 1;
+        t.src = u;
+        a.parentNode.insertBefore(t, a);
+    })(window, document, 'script', '../build/midbound.js', 'mb');
+    
+    mb('create', 'MB-XXXXXXXX-1', 'auto');
     mb('send', 'pageview');
 </script>
 ```
