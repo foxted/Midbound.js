@@ -1,5 +1,5 @@
 {
-  "name": "@saasquatch-inc/midbound-tracker",
+  "name": "@saasquatch-inc/midbound",
   "version": "1.0.0",
   "description": "Midbound Activity Tracker",
   "main": "midbound.js",
