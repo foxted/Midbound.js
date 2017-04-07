@@ -1,5 +1,5 @@
 {
-  "name": "midbound-tracker",
+  "name": "@saasquatch-inc/midbound-tracker",
   "version": "1.0.0",
   "description": "Midbound Activity Tracker",
   "main": "midbound.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alhankeser/tracker.git"
+    "url": "git+https://github.com/Midbound/Midbound.js.git"
   },
   "keywords": [
     "tracker",
@@ -17,11 +17,11 @@
     "analytics"
   ],
   "author": "Valentin Prugnaud, Alhan Keser",
-  "license": "MIT",
+  "license": "Copyright",
   "bugs": {
-    "url": "https://github.com/alhankeser/tracker/issues"
+    "url": "https://github.com/Midbound/Midbound.js/issues"
   },
-  "homepage": "https://github.com/alhankeser/tracker#readme",
+  "homepage": "https://github.com/Midbound/Midbound.js#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-minify": "0.0.12",

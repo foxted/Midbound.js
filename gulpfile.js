@@ -19,3 +19,5 @@ gulp.task('scripts', function() {
 gulp.task('watch', function() {
     gulp.watch(paths.scripts, ['scripts']);
 });
+
+gulp.task('default', ['scripts']);
