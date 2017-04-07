@@ -1,6 +1,6 @@
 {
   "name": "@saasquatch-inc/midbound",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Connect with the right prospects, at the right time",
   "main": "midbound.js",
   "scripts": {
