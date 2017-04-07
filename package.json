@@ -1,27 +1,28 @@
 {
   "name": "@saasquatch-inc/midbound",
   "version": "1.0.0",
-  "description": "Midbound Activity Tracker",
+  "description": "Connect with the right prospects, at the right time",
   "main": "midbound.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Midbound/Midbound.js.git"
+    "url": "git+https://github.com/Saasquatch-Inc/Midbound.js.git"
   },
   "keywords": [
-    "tracker",
+    "tracking-pixel",
     "midbound",
     "marketing",
-    "analytics"
+    "analytics",
+    "sales-automation"
   ],
   "author": "Valentin Prugnaud, Alhan Keser",
   "license": "Copyright",
   "bugs": {
-    "url": "https://github.com/Midbound/Midbound.js/issues"
+    "url": "https://github.com/Saasquatch-Inc/Midbound.js/issues"
   },
-  "homepage": "https://github.com/Midbound/Midbound.js#readme",
+  "homepage": "https://github.com/Saasquatch-Inc/Midbound.js#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-minify": "0.0.12",
